@@ -547,3 +547,99 @@
 # nums = [1, 1, 1, 1, 2, 2, 3]
 # ret = s.topKFrequent(nums, 2)
 # print(ret)
+
+
+# 703. 数据流中的第K大元素-堆-s
+# 设计一个找到数据流中第K大元素的类（class）。注意是排序后的第K大元素，不是第K个不同的元素。
+#
+# 你的 KthLargest 类需要一个同时接收整数 k 和整数数组nums 的构造器，它包含数据流中的初始元素。每次调用 KthLargest.add，返回当前数据流中第K大的元素。
+#
+# 示例:
+#
+# int k = 3;
+# int[] arr = [4,5,8,2];
+# KthLargest kthLargest = new KthLargest(3, arr);
+# kthLargest.add(3);   // returns 4
+# kthLargest.add(5);   // returns 5
+# kthLargest.add(10);  // returns 5
+# kthLargest.add(9);   // returns 8
+# kthLargest.add(4);   // returns 8
+
+# 执行用时 :120 ms, 在所有 python3 提交中击败了95.49%的用户
+# 内存消耗 :17.4 MB, 在所有 python3 提交中击败了5.63%的用户
+# class KthLargest:
+#
+#     def __init__(self, k: int, nums: [int]):
+#         import heapq
+#         self.k = k
+#         self.nums = nums[:k]
+#         heapq.heapify(self.nums)
+#         for i in nums[k:]:
+#             if i > self.nums[0]:
+#                 heapq.heappop(self.nums)
+#                 heapq.heappush(self.nums, i)
+#
+#     def add(self, val: int) -> int:
+#         import heapq
+#         if len(self.nums) < self.k:
+#             heapq.heappush(self.nums, val)
+#         elif val > self.nums[0]:
+#             heapq.heappop(self.nums)
+#             heapq.heappush(self.nums, val)
+#         return self.nums[0]
+#
+#
+# k = 3
+# arr = [4, 5, 8, 2]
+# s = KthLargest(k, arr)
+# ret = s.add(3)
+# print(ret)  # 4
+# ret = s.add(5)
+# print(ret)  # 5
+# ret = s.add(10)
+# print(ret)  # 5
+
+
+# 122. 买卖股票的最佳时机 II-贪婪算法
+# 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+#
+# 设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+#
+# 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+#
+# 示例 1:
+#
+# 输入: [7,1,5,3,6,4]
+# 输出: 7
+# 解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+#      随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+# 示例 2:
+#
+# 输入: [1,2,3,4,5]
+# 输出: 4
+# 解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+#      注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+#      因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+# 示例 3:
+#
+# 输入: [7,6,4,3,1]
+# 输出: 0
+# 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+# 思路：所有上涨交易日都买卖，所有下降交易日都不买卖
+#      “等价于每天都买卖”，把可能跨越多天的买卖都化解成相邻两天的买卖
+
+# class Solution:
+#     def maxProfit(self, prices: [int]) -> int:
+#         sum = 0
+#         for i in range(1, len(prices)):
+#             tmp = prices[i] - prices[i-1]
+#             if tmp > 0:
+#                 sum += tmp
+#         return sum
+#
+#
+# s = Solution()
+# price = [1, 2, 3, 4, 5]
+# ret = s.maxProfit(price)
+# print(ret)

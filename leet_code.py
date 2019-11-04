@@ -968,5 +968,24 @@
 
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        # queue = []
-        # for i in
+        left = 0
+        max_len = 0
+        cur_len = 0
+        window = set()
+        for i in range(len(s)):
+            cur_len += 1
+            while s[i] in window:
+                cur_len -= 1
+                window.remove(s[left])
+                left += 1
+            if cur_len > max_len:
+                max_len = cur_len
+            window.add(s[i])
+        return max_len
+
+
+s = "bbbbb"
+ret = Solution().lengthOfLongestSubstring(s)
+print(s)
+            
+

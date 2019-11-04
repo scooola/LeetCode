@@ -643,3 +643,330 @@
 # price = [1, 2, 3, 4, 5]
 # ret = s.maxProfit(price)
 # print(ret)
+
+
+# 392. 判断子序列-贪婪算法
+# 给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
+#
+# 你可以认为 s 和 t 中仅包含英文小写字母。字符串 t 可能会很长（长度 ~= 500,000），而 s 是个短字符串（长度 <=100）。
+#
+# 字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，"ace"是"abcde"的一个子序列，而"aec"不是）。
+#
+# 示例 1:
+# s = "abc", t = "ahbgdc"
+#
+# 返回 true.
+#
+# 示例 2:
+# s = "axc", t = "ahbgdc"
+#
+# 返回 false.
+#
+# 后续挑战 :
+#
+# 如果有大量输入的 S，称作S1, S2, ... , Sk 其中 k >= 10亿，你需要依次检查它们是否为 T 的子序列。在这种情况下，你会怎样改变代码？
+
+# class Solution:
+#     def isSubsequence(self, s: str, t: str) -> bool:
+#         if s == "":
+#             return True
+#         for i in t:
+#             if s[0] == i:
+#                 s = s[1:]
+#                 if len(s) <= 0:
+#                     return True
+#         return False
+#
+#
+# s = Solution()
+# ret = s.isSubsequence("", "ahbgdc")
+# print(ret)
+
+
+# 455.分发饼干-贪婪算法
+# 假设你是一位很棒的家长，想要给你的孩子们一些小饼干。但是，每个孩子最多只能给一块饼干。对每个孩子 i ，都有一个胃口值 gi ，
+# 这是能让孩子们满足胃口的饼干的最小尺寸；并且每块饼干 j ，都有一个尺寸 sj 。如果 sj >= gi ，我们可以将这个饼干 j 分配给孩子 i ，
+# 这个孩子会得到满足。你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。
+# 注意：
+#
+# 你可以假设胃口值为正。
+# 一个小朋友最多只能拥有一块饼干。
+#
+# 示例 1:
+#
+# 输入: [1,2,3], [1,1]
+#
+# 输出: 1
+#
+# 解释:
+# 你有三个孩子和两块小饼干，3个孩子的胃口值分别是：1,2,3。
+# 虽然你有两块小饼干，由于他们的尺寸都是1，你只能让胃口值是1的孩子满足。
+# 所以你应该输出1。
+# 示例 2:
+#
+# 输入: [1,2], [1,2,3]
+#
+# 输出: 2
+#
+# 解释:
+# 你有两个孩子和三块小饼干，2个孩子的胃口值分别是1,2。
+# 你拥有的饼干数量和尺寸都足以让所有孩子满足。
+# 所以你应该输出2.
+# class Solution:
+#     def findContentChildren(self, g: [int], s: [int]) -> int:
+#         child_list = sorted(g)  # 小朋友
+#         cookie_list = sorted(s)  # 小饼干
+#         num = 0
+#         child_index = 0
+#         cookie_index = 0
+#         while child_index < len(child_list) and cookie_index < len(cookie_list):
+#             if cookie_list[cookie_index] >= child_list[child_index]:
+#                 num += 1
+#                 child_index += 1
+#             cookie_index += 1
+#
+#         return num
+#
+#
+# s = Solution()
+# ret = s.findContentChildren([10, 9, 8, 7], [5, 6, 7, 8])
+# print(ret)
+
+
+# 55. 跳跃游戏-贪婪算法
+# 给定一个非负整数数组，你最初位于数组的第一个位置。
+#
+# 数组中的每个元素代表你在该位置可以跳跃的最大长度。
+#
+# 判断你是否能够到达最后一个位置。
+#
+# 示例 1:
+#
+# 输入: [2,3,1,1,4]
+# 输出: true
+# 解释: 我们可以先跳 1 步，从位置 0 到达 位置 1, 然后再从位置 1 跳 3 步到达最后一个位置。
+# 示例 2:
+#
+# 输入: [3,2,1,0,4]
+# 输出: false
+# 解释: 无论怎样，你总会到达索引为 3 的位置。但该位置的最大跳跃长度是 0 ， 所以你永远不可能到达最后一个位置。
+
+# 思路：从后往前走，看start所在位置+start所在位置可走步数能否大于end所在位置
+#      若大于，则说明start可以到达end位置，则end位置可往前移
+#      最终若end到达0点，则说明可能够到达最后一个位置。
+# class Solution:
+#     def canJump(self, nums: [int]) -> bool:
+#         end = len(nums) - 1
+#         start = len(nums) - 2
+#         while start >= 0:
+#             if nums[start] + start >= end:
+#                 end = start
+#             start -= 1
+#         return end <= 0
+#
+#
+# s = Solution()
+# nums = [2, 3, 1, 1, 4]
+# ret = s.canJump(nums)
+# print(ret)
+
+
+# 134. 加油站-贪婪算法
+# 在一条环路上有 N 个加油站，其中第 i 个加油站有汽油 gas[i] 升。
+#
+# 你有一辆油箱容量无限的的汽车，从第 i 个加油站开往第 i+1 个加油站需要消耗汽油 cost[i] 升。你从其中的一个加油站出发，开始时油箱为空。
+#
+# 如果你可以绕环路行驶一周，则返回出发时加油站的编号，否则返回 -1。
+#
+# 说明: 
+#
+# 如果题目有解，该答案即为唯一答案。
+# 输入数组均为非空数组，且长度相同。
+# 输入数组中的元素均为非负数。
+# 示例 1:
+#
+# 输入:
+# gas  = [1,2,3,4,5]
+# cost = [3,4,5,1,2]
+#
+# 输出: 3
+#
+# 解释:
+# 从 3 号加油站(索引为 3 处)出发，可获得 4 升汽油。此时油箱有 = 0 + 4 = 4 升汽油
+# 开往 4 号加油站，此时油箱有 4 - 1 + 5 = 8 升汽油
+# 开往 0 号加油站，此时油箱有 8 - 2 + 1 = 7 升汽油
+# 开往 1 号加油站，此时油箱有 7 - 3 + 2 = 6 升汽油
+# 开往 2 号加油站，此时油箱有 6 - 4 + 3 = 5 升汽油
+# 开往 3 号加油站，你需要消耗 5 升汽油，正好足够你返回到 3 号加油站。
+# 因此，3 可为起始索引。
+# 示例 2:
+#
+# 输入:
+# gas  = [2,3,4]
+# cost = [3,4,3]
+#
+# 输出: -1
+#
+# 解释:
+# 你不能从 0 号或 1 号加油站出发，因为没有足够的汽油可以让你行驶到下一个加油站。
+# 我们从 2 号加油站出发，可以获得 4 升汽油。 此时油箱有 = 0 + 4 = 4 升汽油
+# 开往 0 号加油站，此时油箱有 4 - 3 + 2 = 3 升汽油
+# 开往 1 号加油站，此时油箱有 3 - 3 + 3 = 3 升汽油
+# 你无法返回 2 号加油站，因为返程需要消耗 4 升汽油，但是你的油箱只有 3 升汽油。
+# 因此，无论怎样，你都不可能绕环路行驶一周。
+
+# 这道题还有些不清楚
+
+# class Solution(object):
+#     def canCompleteCircuit(self, gas, cost):
+#         """
+#         :type gas: List[int]
+#         :type cost: List[int]
+#         :rtype: int
+#         """
+#         location = 0
+#         total_sum = 0
+#         # 如果每个站点加的油总量和小于消耗的总油量，则肯定环绕不了一周
+#         if sum(gas) < sum(cost):
+#             return -1
+#         for index in range(len(gas)):
+#             total_sum += gas[index] - cost[index]
+#             if total_sum < 0:
+#                 location = index+1
+#                 total_sum = 0
+#         return location
+#
+#
+# ret = Solution().canCompleteCircuit([5, 8, 2, 8], [6, 5, 6, 6])
+# print(ret)
+
+# 376.摆动序列-贪婪算法
+# 如果连续数字之间的差严格地在正数和负数之间交替，则数字序列称为摆动序列。第一个差（如果存在的话）可能是正数或负数。少于两个元素的序列也是摆动序列。
+#
+# 例如, [1,7,4,9,2,5] 是一个摆动序列，因为差值 (6,-3,5,-7,3) 是正负交替出现的。
+# 相反, [1,4,7,2,5] 和 [1,7,4,5,5] 不是摆动序列，第一个序列是因为它的前两个差值都是正数，第二个序列是因为它的最后一个差值为零。
+#
+# 给定一个整数序列，返回作为摆动序列的最长子序列的长度。 通过从原始序列中删除一些（也可以不删除）元素来获得子序列，剩下的元素保持其原始顺序。
+#
+# 示例 1:
+#
+# 输入: [1,7,4,9,2,5]
+# 输出: 6
+# 解释: 整个序列均为摆动序列。
+# 示例 2:
+#
+# 输入: [1,17,5,10,13,15,10,5,16,8]
+# 输出: 7
+# 解释: 这个序列包含几个长度为 7 摆动序列，其中一个可为[1,17,10,13,10,16,8]。
+# 示例 3:
+#
+# 输入: [1,2,3,4,5,6,7,8,9]
+# 输出: 2
+# 进阶:
+# 你能否用 O(n) 时间复杂度完成此题?
+
+# class Solution:
+#     def wiggleMaxLength(self, nums: [int]) -> int:
+#         if len(nums) < 2:
+#             return len(nums)
+#         max_len_list = [nums[0]]
+#         UP = False
+#         DOWN = False
+#         for i in range(0, len(nums) - 1):
+#             if UP is False and nums[i+1] - nums[i] > 0:
+#                 UP = True
+#                 DOWN = False
+#                 max_len_list.append(nums[i+1])
+#             elif UP is True and nums[i+1] - nums[i] > 0:
+#                 # 持续上升，替换为最大值
+#                 max_len_list[-1] = nums[i+1]
+#             elif DOWN is False and nums[i+1] - nums[i] < 0:
+#                 DOWN = True
+#                 UP = False
+#                 max_len_list.append(nums[i+1])
+#             elif DOWN is True and nums[i+1] - nums[i] < 0:
+#                 max_len_list[-1] = nums[i+1]
+#         return len(max_len_list)
+# nums = [1,7,4,9,2,5]
+# ret = Solution().wiggleMaxLength(nums)
+# print(ret)
+
+
+# 402.移掉K位数字-贪婪算法
+# 给定一个以字符串表示的非负整数 num，移除这个数中的 k 位数字，使得剩下的数字最小。
+#
+# 注意:
+#
+# num 的长度小于 10002 且 ≥ k。
+# num 不会包含任何前导零。
+# 示例 1 :
+#
+# 输入: num = "1432219", k = 3
+# 输出: "1219"
+# 解释: 移除掉三个数字 4, 3, 和 2 形成一个新的最小的数字 1219。
+# 示例 2 :
+#
+# 输入: num = "10200", k = 1
+# 输出: "200"
+# 解释: 移掉首位的 1 剩下的数字为 200. 注意输出不能有任何前导零。
+# 示例 3 :
+#
+# 输入: num = "10", k = 2
+# 输出: "0"
+# 解释: 从原数字移除所有的数字，剩余为空就是0。
+
+# 利用桟维持一个递增的序列，也就是说将字符串中字符依次入栈，
+# 如果当前字符比栈顶元素小，并且还可以继续删除元素，那么就将栈顶元素移掉，且继续向下一个栈顶元素比较，尽量维持序列递增，也可以算是一个贪心思想。
+
+# class Solution:
+#     def removeKdigits(self, num: str, k: int) -> str:
+#         if len(num) == k:
+#             return '0'
+#         stack = [num[0]]
+#         for i in range(1, len(num)):
+#             while stack and stack[-1] > num[i] and k > 0:
+#                 stack.pop()
+#                 k -= 1
+#             stack.append(num[i])
+#         # k > 0说明剩余数字为全部相同或者递增如：11111或12345
+#         # 将后k个删除即可
+#         if k > 0:
+#             stack = stack[:-k]
+#         while True:
+#             if stack[0] == '0' and len(stack) > 1:
+#                 stack = stack[1:]
+#             else:
+#                 break
+#         return ''.join(stack)
+#
+#
+# num = "1234560"
+# k = 3
+# ret = Solution().removeKdigits(num, 6)
+# print(ret)
+
+
+# 3.无重复字符的最长子串
+# 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+#
+# 示例 1:
+#
+# 输入: "abcabcbb"
+# 输出: 3
+# 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+# 示例 2:
+#
+# 输入: "bbbbb"
+# 输出: 1
+# 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+# 示例 3:
+#
+# 输入: "pwwkew"
+# 输出: 3
+# 解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+#      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # queue = []
+        # for i in

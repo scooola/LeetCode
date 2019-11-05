@@ -1177,6 +1177,8 @@
 #         return int_tmp
 
 
+# 执行用时 :36 ms, 在所有 python3 提交中击败了98.21%的用户
+# 内存消耗 :13.9 MB, 在所有 python3 提交中击败了5.21%的用户
 # class Solution:
 #     def reverse(self, x: int) -> int:
 #         if x < 0:

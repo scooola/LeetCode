@@ -966,7 +966,240 @@
 # 解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
 #      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
 
-class Solution:
-    def lengthOfLongestSubstring(self, s: str) -> int:
-        # queue = []
-        # for i in
+
+# 暴力解法，两层for循环
+# class Solution:
+#     def lengthOfLongestSubstring(self, s: str) -> int:
+#         if len(s) == 1:
+#             return 1
+#         max_len = 0
+#         for i in range(0, len(s)):
+#             tmp_list = []
+#             tmp_list.append(s[i])
+#             for j in range(i+1, len(s)):
+#                 if s[j] not in tmp_list:
+#                     tmp_list.append(s[j])
+#                 else:
+#                     break
+#             if len(tmp_list) > max_len:
+#                 max_len = len(tmp_list)
+#
+#         return max_len
+
+
+# 滑动窗口
+# 判断某元素是否在set内比判断某元素是否在list内快很多
+# class Solution:
+#     def lengthOfLongestSubstring(self, s: str) -> int:
+#         if not s:
+#             return 0
+#         max_len = 0
+#         cur_len = 0
+#         left = 0
+#         window = set()
+#         for i in range(len(s)):
+#             cur_len += 1
+#             while s[i] in window:
+#                 cur_len -= 1
+#                 window.remove(s[left])
+#                 left += 1
+#             if cur_len > max_len:
+#                 max_len = cur_len
+#             window.add(s[i])
+#         return max_len
+#
+#
+# s = "abcabcbb"
+# ret = Solution().lengthOfLongestSubstring(s)
+# print(ret)
+
+
+# 5. 最长回文子串-动态规划
+# 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+#
+# 示例 1：
+#
+# 输入: "babad"
+# 输出: "bab"
+# 注意: "aba" 也是一个有效答案。
+# 示例 2：
+#
+# 输入: "cbbd"
+# 输出: "bb"
+
+
+# 暴力解法
+# class Solution:
+#     def longestPalindrome(self, s: str) -> str:
+#         if len(s) < 2:
+#             return s
+#         max_len = 1
+#         result = s[0]
+#         for i in range(len(s)-1):
+#             for j in range(i+1, len(s)):
+#                 is_back_to_text = self.isBackTotext(s, i, j)
+#                 if is_back_to_text and j - i + 1 > max_len:
+#                     max_len = j - i + 1
+#                     result = s[i:j+1]
+#
+#         return result
+#
+#     def isBackTotext(self, s, left, right):
+#         while(left < right):
+#             if s[left] != s[right]:
+#                 return False
+#             left += 1
+#             right -= 1
+#         return True
+
+# 动态规划
+# class Solution:
+#     def longestPalindrome(self, s: str) -> str:
+#         result = ''
+#         for i in range(len(s)):
+#             str1 = self.getLongestPalindrome(s, i, i)
+#             if len(str1) >len(result):
+#                 result = str1
+#             str2 = self.getLongestPalindrome(s, i, i+1)
+#             if len(str2) >len(result):
+#                 result = str2
+
+#         return result
+
+#     def getLongestPalindrome(self, s, left, right):
+#         while left >= 0 and right < len(s) and s[left] == s[right]:
+#             left -= 1
+#             right += 1
+
+#         return s[left+1:right]
+
+
+# s = "babad"
+# ret = Solution().longestPalindrome(s)
+# print(ret)
+
+
+# 53. 最大子序和-动态规划
+# 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+# 示例:
+
+# 输入: [-2,1,-3,4,-1,2,1,-5,4],
+# 输出: 6
+# 解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+# 进阶:
+
+# 如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的分治法求解。
+
+# class Solution:
+#     def maxSubArray(self, nums: [int]) -> int:
+#         if max(nums) < 0:
+#             return max(nums)
+#         local_max = 0
+#         global_max = 0
+#         for num in nums:
+#             local_max = max(0, local_max+num)
+#             global_max = max(local_max, global_max)
+#         return global_max
+
+
+# 62. 不同路径-动态规划
+# 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
+
+# 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+
+# 问总共有多少条不同的路径？
+# 说明：m 和 n 的值均不超过 100。
+
+# 示例 1:
+
+# 输入: m = 3, n = 2
+# 输出: 3
+# 解释:
+# 从左上角开始，总共有 3 条路径可以到达右下角。
+# 1. 向右 -> 向右 -> 向下
+# 2. 向右 -> 向下 -> 向右
+# 3. 向下 -> 向右 -> 向右
+
+# class Solution:
+#     def uniquePaths(self, m, n):
+#         dp = [[1]*n] + [[1]+[0] * (n-1) for _ in range(m-1)]
+#         for i in range(1, m):
+#             for j in range(1, n):
+#                 dp[i][j] = dp[i-1][j] + dp[i][j-1]
+#         return dp[m-1][n-1]
+#
+#
+# ret = Solution().uniquePaths(3, 2)
+# print(ret)
+
+
+# 7. 整数反转
+# 给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。
+#
+# 示例 1:
+#
+# 输入: 123
+# 输出: 321
+#  示例 2:
+#
+# 输入: -123
+# 输出: -321
+# 示例 3:
+#
+# 输入: 120
+# 输出: 21
+# 注意:
+#
+# 假设我们的环境只能存储得下 32 位的有符号整数，则其数值范围为 [−231,  231 − 1]。请根据这个假设，如果反转后整数溢出那么就返回 0。
+
+
+# 需要注意的一点就是，python的取模是根据向下取整法的，而c/c++/java是基于向零取整的。
+# 例如：
+# 在python中 ：-53除以10=-6 …7 所以python中 -53%10=7
+# 在c语言中，-53除以10=-5 … -3 所以c语言中 -53%10=-3
+# （python3中， /是精确除法，//是向下取整除法，%是求模，四舍五入取整round, 向零取整int, 向下和向上取整函数math.floor, math.ceil）
+
+
+# 不推荐该方法（投机）
+# class Solution:
+#     def reverse(self, x: int) -> int:
+#         tmp = x
+#         if tmp < 0:
+#             tmp = -tmp
+#         str_tmp = str(tmp)
+#         str_tmp = str_tmp[::-1]
+#         int_tmp = int(str_tmp)
+#         if x < 0:
+#             int_tmp = -int_tmp
+#         if int_tmp <= -2**31 or int_tmp >= 2**31-1:
+#             return 0
+#         return int_tmp
+
+
+# class Solution:
+#     def reverse(self, x: int) -> int:
+#         if x < 0:
+#             num = -x
+#         else:
+#             num = x
+#         num_list = []
+#         while num:
+#             tmp = num % 10
+#             num_list.append(tmp)
+#             num = num // 10
+#
+#         num_list.reverse()
+#
+#         while num_list:
+#             tmp = num_list.pop()
+#             num = num * 10 + tmp
+#         if x < 0:
+#             num = -num
+#         if num <= -2**31 or num >= 2**31-1:
+#             return 0
+#         return num
+#
+#
+# ret = Solution().reverse(-123)
+# print(ret)

@@ -1130,7 +1130,95 @@
 #         return dp[m-1][n-1]
 #
 #
-# ret = Solution().uniquePaths(3, 2)
+# ret = Solution().uniquePaths(3, 3)
+# print(ret)
+
+
+# 63.不同路径II
+# 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
+#
+# 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+#
+# 现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
+# 网格中的障碍物和空位置分别用 1 和 0 来表示。
+#
+# 说明：m 和 n 的值均不超过 100。
+#
+# 示例 1:
+#
+# 输入:
+# [
+#   [0,0,0],
+#   [0,1,0],
+#   [0,0,0]
+# ]
+# 输出: 2
+# 解释:
+# 3x3 网格的正中间有一个障碍物。
+# 从左上角到右下角一共有 2 条不同的路径：
+# 1. 向右 -> 向右 -> 向下 -> 向下
+# 2. 向下 -> 向下 -> 向右 -> 向右
+
+# 思路: 将障碍位置可以到达的方法设为0即可
+#      该方法速度过慢
+# class Solution:
+#     def uniquePathsWithObstacles(self, obstacleGrid: [[int]]) -> int:
+#         if obstacleGrid[0][0] == 1:
+#             return 0
+#         # m 行 ,n 列
+#         m, n = len(obstacleGrid), len(obstacleGrid[0])
+#         for i in range(m):
+#             for j in range(n):
+#                 if i == 0 and j == 0:
+#                     obstacleGrid[i][j] = 1
+#                     continue
+#                 if obstacleGrid[i][j] == 1:
+#                     obstacleGrid[i][j] = 0
+#                     continue
+#                 if i == 0:
+#                     obstacleGrid[i][j] = obstacleGrid[i][j-1]
+#                 elif j == 0:
+#                     obstacleGrid[i][j] = obstacleGrid[i-1][j]
+#                 else:
+#                     obstacleGrid[i][j] = obstacleGrid[i-1][j] + obstacleGrid[i][j-1]
+#         return obstacleGrid[m-1][n-1]
+
+# 优化思路:将0,0位置的赋值，以及第一行和第一列的赋值提出来
+#         避免双层循环内大量if判断降低运行速度
+
+# class Solution:
+#     def uniquePathsWithObstacles(self, obstacleGrid: [[int]]) -> int:
+#         if obstacleGrid[0][0] == 1:
+#             return 0
+#         # m 行 ,n 列
+#         m, n = len(obstacleGrid), len(obstacleGrid[0])
+#         obstacleGrid[0][0] = 1
+#         # 将第一行数据赋值
+#         for j in range(1, n):
+#             obstacleGrid[0][j] = 1 if obstacleGrid[0][j] == 0 and obstacleGrid[0][j-1] == 1 else 0
+#
+#         # 将第一列数据赋值
+#         for i in range(1, m):
+#             obstacleGrid[i][0] = 1 if obstacleGrid[i][0] == 0 and obstacleGrid[i-1][0] == 1 else 0
+#
+#         for i in range(1, m):
+#             for j in range(1, n):
+#                 if obstacleGrid[i][j] == 1:
+#                     obstacleGrid[i][j] = 0
+#                     continue
+#                 if i == 0:
+#                     obstacleGrid[i][j] = obstacleGrid[i][j-1]
+#                 elif j == 0:
+#                     obstacleGrid[i][j] = obstacleGrid[i-1][j]
+#                 else:
+#                     obstacleGrid[i][j] = obstacleGrid[i-1][j] + obstacleGrid[i][j-1]
+#         return obstacleGrid[m-1][n-1]
+#
+#
+# s = [[0, 0, 0],
+#      [0, 1, 0],
+#      [0, 0, 0]]
+# ret = Solution().uniquePathsWithObstacles(s)
 # print(ret)
 
 
@@ -1204,4 +1292,51 @@
 #
 #
 # ret = Solution().reverse(-123)
+# print(ret)
+
+
+# 64. 最小路径和
+# 给定一个包含非负整数的 m x n 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+#
+# 说明：每次只能向下或者向右移动一步。
+#
+# 示例:
+#
+# 输入:
+# [
+#   [1,3,1],
+#   [1,5,1],
+#   [4,2,1]
+# ]
+# 输出: 7
+# 解释: 因为路径 1→3→1→1→1 的总和最小。
+# class Solution:
+#     def minPathSum(self, grid: [[int]]) -> int:
+#         m = len(grid)     # 行
+#         n = len(grid[0])  # 列
+#         # 先把第一列算出来
+#         for i in range(1, m):
+#             grid[i][0] = grid[i][0] + grid[i-1][0]
+#
+#         # 再把第一行算出来
+#         for j in range(1, n):
+#             grid[0][j] = grid[0][j] + grid[0][j-1]
+#
+#         for i in range(1, m):
+#             for j in range(1, n):
+#                 # 比较该位置上方或左方数字，将较小值加给该位置
+#                 # if grid[i-1][j] < grid[i][j-1]:
+#                 #     num = grid[i-1][j]
+#                 # else:
+#                 #     num = grid[i][j-1]
+#                 num = grid[i-1][j] if grid[i-1][j] < grid[i][j-1] else grid[i][j-1]
+#                 grid[i][j] += num
+#
+#         return grid[m-1][n-1]
+#
+#
+# s = [[1, 3, 1],
+#      [1, 5, 1],
+#      [4, 2, 1]]
+# ret = Solution().minPathSum(s)
 # print(ret)

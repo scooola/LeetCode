@@ -1340,3 +1340,402 @@
 #      [4, 2, 1]]
 # ret = Solution().minPathSum(s)
 # print(ret)
+
+
+# 70. 爬楼梯
+# 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+#
+# 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+#
+# 注意：给定 n 是一个正整数。
+#
+# 示例 1：
+#
+# 输入： 2
+# 输出： 2
+# 解释： 有两种方法可以爬到楼顶。
+# 1.  1 阶 + 1 阶
+# 2.  2 阶
+# 示例 2：
+#
+# 输入： 3
+# 输出： 3
+# 解释： 有三种方法可以爬到楼顶。
+# 1.  1 阶 + 1 阶 + 1 阶
+# 2.  1 阶 + 2 阶
+# 3.  2 阶 + 1 阶
+
+# class Solution:
+#     def climbStairs(self, n: int) -> int:
+#         if n == 1:
+#             return 1
+#         climbNums = [1 for _ in range(n)]
+#         climbNums[0] = 1
+#         climbNums[1] = 2
+#         for i in range(2, len(climbNums)):
+#             climbNums[i] = climbNums[i-2] + climbNums[i-1]
+#         return climbNums[-1]
+#
+#
+# ret = Solution().climbStairs(6)
+# print(ret)
+
+
+# 8. 字符串转换整数 (atoi)
+# 请你来实现一个 atoi 函数，使其能将字符串转换成整数。
+# 首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。
+# 当我们寻找到的第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字组合起来，作为该整数的正负号；假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成整数。
+# 该字符串除了有效的整数部分之后也可能会存在多余的字符，这些字符可以被忽略，它们对于函数不应该造成影响。
+# 注意：假如该字符串中的第一个非空格字符不是一个有效整数字符、字符串为空或字符串仅包含空白字符时，则你的函数不需要进行转换。
+# 在任何情况下，若函数不能进行有效的转换时，请返回 0。
+#
+# 说明：
+# 假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−2**31,  2**31 − 1]。如果数值超过这个范围，请返回  INT_MAX (2**31 − 1) 或 INT_MIN (−2**31) 。
+#
+# 示例 1:
+#
+# 输入: "42"
+# 输出: 42
+# 示例 2:
+#
+# 输入: "   -42"
+# 输出: -42
+# 解释: 第一个非空白字符为 '-', 它是一个负号。
+#      我们尽可能将负号与后面所有连续出现的数字组合起来，最后得到 -42 。
+# 示例 3:
+#
+# 输入: "4193 with words"
+# 输出: 4193
+# 解释: 转换截止于数字 '3' ，因为它的下一个字符不为数字。
+# 示例 4:
+#
+# 输入: "words and 987"
+# 输出: 0
+# 解释: 第一个非空字符是 'w', 但它不是数字或正、负号。
+#      因此无法执行有效的转换。
+# 示例 5:
+#
+# 输入: "-91283472332"
+# 输出: -2147483648
+# 解释: 数字 "-91283472332" 超过 32 位有符号整数范围。
+#      因此返回 INT_MIN (−2**31) 。
+
+# class Solution:
+#     def myAtoi(self, strs: str) -> int:
+#         if strs == "":
+#             return 0
+#         size = len(strs)
+#         num_list = []
+#         index = 0
+#         nums = set(str(i) for i in range(10))
+#         for i in range(size):
+#             if strs[i] == ' ':
+#                 continue
+#             elif strs[i] == '-' or strs[i] == '+' or strs[i] in nums:
+#                 index = i
+#                 break
+#             else:
+#                 return 0
+#         while True:
+#             num_list.append(strs[index])
+#             index += 1
+#             if index >= size or strs[index] not in nums:
+#                 break
+#         ret_str = "".join(num_list)
+#         if len(ret_str) == 1 and ret_str[0] not in nums:
+#             return 0
+#         ret_num = int(ret_str)
+#         if ret_num <= -2**31 or ret_num > 2**31-1:
+#             if ret_num > 0:
+#                 return 2147483647
+#             return -2147483648
+#         return ret_num
+#
+#
+# s = "2147483648"
+# ret = Solution().myAtoi(s)
+# print(ret)
+
+
+# 9. 回文数
+# 判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+#
+# 示例 1:
+#
+# 输入: 121
+# 输出: true
+# 示例 2:
+#
+# 输入: -121
+# 输出: false
+# 解释: 从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。
+# 示例 3:
+#
+# 输入: 10
+# 输出: false
+# 解释: 从右向左读, 为 01 。因此它不是一个回文数。
+# 进阶:
+#
+# 你能不将整数转为字符串来解决这个问题吗？
+
+# class Solution:
+#     def isPalindrome(self, x: int) -> bool:
+#         if x < 0:
+#             return False
+#         num = x
+#         new_num = 0
+#         while num:
+#             tmp_num = num % 10
+#             new_num = new_num * 10 + tmp_num
+#             num = num // 10
+#         return new_num == x
+#
+#
+# num = 121
+# ret = Solution().isPalindrome(num)
+# print(ret)
+
+
+# 13. 罗马数字转整数
+# 罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。
+#
+# 字符          数值
+# I             1
+# V             5
+# X             10
+# L             50
+# C             100
+# D             500
+# M             1000
+# 例如， 罗马数字 2 写做 II ，即为两个并列的 1。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。
+#
+# 通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4 。
+# 同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：
+#
+# I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。
+# X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。 
+# C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。
+# 给定一个罗马数字，将其转换成整数。输入确保在 1 到 3999 的范围内。
+#
+# 示例 1:
+#
+# 输入: "III"
+# 输出: 3
+# 示例 2:
+#
+# 输入: "IV"
+# 输出: 4
+# 示例 3:
+#
+# 输入: "IX"
+# 输出: 9
+# 示例 4:
+#
+# 输入: "LVIII"
+# 输出: 58
+# 解释: L = 50, V= 5, III = 3.
+# 示例 5:
+#
+# 输入: "MCMXCIV"
+# 输出: 1994
+# 解释: M = 1000, CM = 900, XC = 90, IV = 4.
+
+
+# 暴力解法
+# class Solution:
+#     def romanToInt(self, s: str) -> int:
+#         num_dict = dict(I=1, V=5, X=10, L=50, C=100, D=500, M=1000, IV=4, IX=9, XL=40, XC=90, CD=400, CM=900)
+#         num_list = []
+#         i = 0
+#         while i < len(s):
+#             if i == (len(s) - 1):
+#                 num_list.append(s[i])
+#                 i += 1
+#                 continue
+#             if s[i] == 'I' and (s[i+1] == 'V' or s[i+1] == 'X'):
+#                 tmp = s[i] + s[i+1]
+#                 num_list.append(tmp)
+#                 i += 1
+#             elif s[i] == 'X' and (s[i+1] == 'L' or s[i+1] == 'C'):
+#                 tmp = s[i] + s[i+1]
+#                 num_list.append(tmp)
+#                 i += 1
+#             elif s[i] == 'C' and (s[i+1] == 'D' or s[i+1] == 'M'):
+#                 tmp = s[i] + s[i+1]
+#                 num_list.append(tmp)
+#                 i += 1
+#             else:
+#                 num_list.append(s[i])
+#             i += 1
+#
+#         num = 0
+#         for i in num_list:
+#             num = num + num_dict[i]
+#         return num
+
+
+# 优化-但速度并未明显提升
+# class Solution:
+#     def romanToInt(self, s: str) -> int:
+#         num_dict = dict(I=1, V=5, X=10, L=50, C=100, D=500, M=1000, IV=4, IX=9, XL=40, XC=90, CD=400, CM=900)
+#         num_set = set(('I', 'V', 'X', 'L', 'C', 'D', 'M', 'IV', 'IX', 'XL', 'XC', 'CD', 'CM'))
+#         index = 0
+#         num = 0
+#         while index < len(s):
+#             if index+1 < len(s) and s[index]+s[index+1] in num_set:
+#                 num = num + num_dict[s[index] + s[index+1]]
+#                 index += 2
+#             else:
+#                 num = num + num_dict[s[index]]
+#                 index += 1
+#         return num
+#
+#
+# s = "MCMXCIV"
+# ret = Solution().romanToInt(s)
+# print(ret)
+
+
+# 14. 最长公共前缀
+# 编写一个函数来查找字符串数组中的最长公共前缀。
+#
+# 如果不存在公共前缀，返回空字符串 ""。
+#
+# 示例 1:
+#
+# 输入: ["flower","flow","flight"]
+# 输出: "fl"
+# 示例 2:
+#
+# 输入: ["dog","racecar","car"]
+# 输出: ""
+# 解释: 输入不存在公共前缀。
+# 说明:
+#
+# 所有输入只包含小写字母 a-z 。
+
+# class Solution:
+#     def longestCommonPrefix(self, strs: [str]) -> str:
+#         size = len(strs)
+#         if size == 0:
+#             return ""
+#         if size == 1:
+#             return strs[0]
+#
+#         # 先找出前两个的公共前缀
+#         # 若存在，则用该前缀与后续str比较
+#         # 若不存在，则直接返回""
+#         index = 0
+#         if strs[0] == "" or strs[1] == "" or strs[0][0] != strs[1][0]:
+#             return ""
+#         while index < len(strs[0]) and index < len(strs[1]):
+#             if strs[0][index] == strs[1][index]:
+#                 index += 1
+#             else:
+#                 break
+#         public_str = strs[0][:index]
+#         for i in range(2, size):
+#             index = 0
+#             # 判断首位是否相同，不同直接返回""
+#             if strs[i] == "" or public_str[index] != strs[i][index]:
+#                 return ""
+#             while index < len(public_str) and index < len(strs[i]):
+#                 if public_str[index] == strs[i][index]:
+#                     index += 1
+#                 else:
+#                     break
+#             public_str = public_str[0:index]
+#         return public_str
+#
+#
+# 大神解法
+# class Solution:
+#     def longestCommonPrefix(self, strs: [str]) -> str:
+#         s = ""
+#         for i in zip(*strs):
+#             if len(set(i)) == 1:
+#                 s += i[0]
+#             else:
+#                 break
+#         return s
+#
+#
+# strs = ["flower", "flow", "flight"]
+# ret = Solution().longestCommonPrefix(strs)
+# print(ret)
+
+# 21. 合并两个有序链表
+# 将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+#
+# 示例：
+#
+# 输入：1->2->4, 1->3->4
+# 输出：1->1->2->3->4->4
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+#
+#
+# class Solution:
+#     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+#         if l1 is None:
+#             return l2
+#         elif l2 is None:
+#             return l1
+#
+#         head = ListNode(0)
+#         cur = head
+#         while l1 and l2:
+#             if l1.val < l2.val:
+#                 cur.next = l1
+#                 l1 = l1.next
+#             else:
+#                 cur.next = l2
+#                 l2 = l2.next
+#             cur = cur.next
+#         if l1:
+#             cur.next = l1
+#         elif l2:
+#             cur.next = l2
+#         return head.next
+#
+#
+# l1 = ListNode(1)
+# l1.next = ListNode(2)
+# l1_next = l1.next
+# l1_next.next = ListNode(4)
+# l2 = ListNode(1)
+# l2.next = ListNode(3)
+# l2_next = l2.next
+# l2_next.next = ListNode(4)
+# ret = Solution().mergeTwoLists(l1, l2)
+# while ret:
+#     print(ret.val)
+#     ret = ret.next
+
+
+# 91. 解码方法
+# 一条包含字母 A-Z 的消息通过以下方式进行了编码：
+#
+# 'A' -> 1
+# 'B' -> 2
+# ...
+# 'Z' -> 26
+# 给定一个只包含数字的非空字符串，请计算解码方法的总数。
+#
+# 示例 1:
+#
+# 输入: "12"
+# 输出: 2
+# 解释: 它可以解码为 "AB"（1 2）或者 "L"（12）。
+# 示例 2:
+#
+# 输入: "226"
+# 输出: 3
+# 解释: 它可以解码为 "BZ" (2 26), "VF" (22 6), 或者 "BBF" (2 2 6) 。
+# class Solution:
+#     def numDecodings(self, s: str) -> int:
+#         pass
